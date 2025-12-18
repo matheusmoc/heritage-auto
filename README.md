@@ -393,7 +393,59 @@ O projeto segue a estrutura solicitada com `core` para configurações e `app` p
 - **Lógica da Aplicação**: `app/`
 - **Templates HTML**: `app/templates/`
 - **Scripts Alpine.js/JS e Tailwind**: `static/` (subpastas: `home/`, `messages/`, `js/`, `posts/`, `layouts`)
-- **Fixtures (Dados)**: `app/fixtures/`
+- Fixtures (Dados): `app/fixtures/`
+
+## Diagrama de Entidade e Relacionamento (DER)
+
+```mermaid
+erDiagram
+    User {
+        int id
+        string username
+        string email
+        string first_name
+        string last_name
+    }
+    Category {
+        int id
+        string name
+        string slug
+    }
+    Post {
+        int id
+        string title
+        text content
+        string image
+        string video
+        boolean is_official
+        datetime created_at
+        datetime updated_at
+    }
+    Comment {
+        int id
+        text content
+        datetime created_at
+    }
+    Message {
+        int id
+        string subject
+        text body
+        datetime created_at
+        boolean is_read
+    }
+
+    User ||--o{ Post : "authors"
+    User }|--|{ Post : "likes"
+    Category ||--o{ Post : "categorizes"
+    
+    Post ||--o{ Comment : "has"
+    User ||--o{ Comment : "writes"
+    Comment ||--o{ Comment : "replies to"
+
+    User ||--o{ Message : "sends"
+    User ||--o{ Message : "receives"
+    Message ||--o{ Message : "replies to"
+```
 
 ## Categorias
 - Clássicos
