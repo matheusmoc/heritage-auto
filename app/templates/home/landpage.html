@@ -16,7 +16,7 @@
             <h1 class="text-6xl md:text-8xl font-black italic uppercase leading-none mb-6">
                 Heritage <span class="text-primary block md:inline">Auto</span>
             </h1>
-            <p class="text-xl md:text-2xl text-muted mb-10 font-light tracking-wide">Paixão por Velocidade. Legado pela performance.</p>
+            <p class="text-xl md:text-2xl text-muted mb-10 font-light tracking-wide">Paixão por velocidade. Legado pela performance.</p>
             <div class="flex flex-col md:flex-row justify-center gap-4">
                 <a class="bg-primary text-black font-bold uppercase py-3 px-8 hover:bg-white hover:scale-105 transition-all duration-300" href="{% url 'post_create' %}">
                     Ligar motores
@@ -53,6 +53,13 @@
                         </div>
                     </div>
                 </template>
+            </div>
+            
+            <!-- Load More News -->
+            <div class="text-center mt-8" x-show="newsNext">
+                <button @click="loadMoreNews()" class="bg-transparent border border-primary text-primary hover:bg-primary hover:text-black font-bold py-2 px-6 rounded transition-colors duration-300 uppercase text-sm tracking-wider">
+                    Carregar mais notícias
+                </button>
             </div>
         </div>
 
@@ -119,6 +126,13 @@
                         </div>
                     </div>
                 </template>
+
+                <!-- Load More Community -->
+                <div class="text-center mt-12" x-show="communityNext">
+                    <button @click="loadMoreCommunity()" class="bg-transparent border border-white text-white hover:bg-white hover:text-black font-bold py-3 px-8 rounded transition-colors duration-300 uppercase tracking-wider">
+                        Carregar mais posts
+                    </button>
+                </div>
 
                 <!-- Empty State -->
                 <div x-show="communityPosts.length === 0 && !loading" class="text-center py-20 bg-card/50 border border-white/5" style="display: none;">

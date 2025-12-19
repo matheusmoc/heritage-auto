@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from rest_framework.pagination import PageNumberPagination
 from .models import Post, Message, Category, Comment
 from .serializers import PostSerializer, CommentSerializer, MessageSerializer
 from .forms import SignUpForm
@@ -71,8 +72,14 @@ class CategoryListAPIView(APIView):
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
 
+class PostPagination(PageNumberPagination):
+    page_size = 6
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class PostListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = PostPagination
 
     def get(self, request):
         is_official = request.query_params.get('is_official')
@@ -81,8 +88,11 @@ class PostListAPIView(APIView):
             posts = Post.objects.filter(is_official=is_official).order_by('-created_at')
         else:
             posts = Post.objects.all().order_by('-created_at')
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
+        
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(posts, request)
+        serializer = PostSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = PostSerializer(data=request.data)
